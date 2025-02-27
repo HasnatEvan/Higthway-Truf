@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { app } from "../Firebase/firebase.config";
 import axios from "axios";
 import PropTypes from 'prop-types'; // Import PropTypes
@@ -26,7 +26,17 @@ const AuthProviders = ({ children }) => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
+  const resetPassword = async (email) => {
+    setLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, email);
 
+    } catch (error) {
+      console.error("Reset password error:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   const logOut = async () => {
     setLoading(true);
     return signOut(auth);
@@ -64,6 +74,7 @@ const AuthProviders = ({ children }) => {
     signInWithGoogle,
     logOut,
     updateUserProfile,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;

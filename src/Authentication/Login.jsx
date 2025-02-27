@@ -1,62 +1,90 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../Hook/useAuth";
-import Swal from "sweetalert2";
 import { useState } from "react";
 import GoogleLogin from "../Shared/GoogleLogin";
+import Lottie from "lottie-react";
+import loginLottie from "../../src/assets/lotties/login.json"; // Lottie animation file
 
 const Login = () => {
-    const { signIn } = useAuth();
+    const { signIn, resetPassword } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();  // Initialize location to access the redirect state
-    const [loading, setLoading] = useState(false); // Track loading state
+    const location = useLocation();
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState(null);
+    const [isError, setIsError] = useState(false);
+    const [emailForReset, setEmailForReset] = useState("");
+    const [showResetModal, setShowResetModal] = useState(false);
 
-    // If user was redirected from a protected route, get the previous path
-    const from = location.state?.from?.pathname || '/';  // Default to home if no redirect
+    const from = location.state?.from?.pathname || "/";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setMessage(null);
+        setIsError(false);
+
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
 
         try {
-            setLoading(true);  // Start loading spinner
-
+            setLoading(true);
             const result = await signIn(email, password);
-            console.log(result); // Just for debugging
+            console.log(result);
 
-            // Show success message
-            Swal.fire({
-                title: 'Success!',
-                text: 'Login successful!',
-                icon: 'success',
-                confirmButtonText: 'OK',
-            }).then(() => {
-                // Navigate to the page user came from (or home page if no redirect) after successful login
+            setMessage("Login successful! Redirecting...");
+            setTimeout(() => {
                 navigate(from, { replace: true });
-            });
+            }, 1500);
         } catch (error) {
             console.error("Login failed: ", error);
 
-            // Show error message
-            Swal.fire({
-                title: 'Error!',
-                text: error.message || 'Login failed!',
-                icon: 'error',
-                confirmButtonText: 'Try Again',
-            });
+            if (error.code === "auth/invalid-credential") {
+                setMessage("Incorrect email or password! Please try again.");
+            } else if (error.code === "auth/user-not-found") {
+                setMessage("No account found with this email.");
+            } else if (error.code === "auth/wrong-password") {
+                setMessage("Incorrect password! Please try again.");
+            } else {
+                setMessage(error.message || "Login failed! Please try again.");
+            }
+
+            setIsError(true);
         } finally {
-            setLoading(false);  // Stop loading spinner
+            setLoading(false);
+        }
+    };
+
+    const handlePasswordReset = async () => {
+        if (!emailForReset) {
+            setMessage("Please enter your email to reset the password.");
+            setIsError(true);
+            return;
+        }
+
+        try {
+            await resetPassword(emailForReset);
+            setMessage("Password reset email sent! Check your inbox.");
+            setIsError(false);
+            setShowResetModal(false);
+        } catch (error) {
+            console.error("Password Reset Error: ", error);
+            setMessage("Failed to send reset email. Please try again.");
+            setIsError(true);
         }
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="bg-white p-8 rounded-lg shadow-md w-96">
-                <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+        <div className={`flex flex-col md:flex-row items-center justify-around min-h-screen bg-gray-100 ${showResetModal ? "backdrop-blur-md" : ""}`}>
+            {/* Lottie Animation (Mobile: Top, Desktop: Left) */}
+            <div className="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 -mt-32 lg:mt-32">
+                <Lottie animationData={loginLottie} loop={true} className="w-3/4 md:w-full h-auto" />
+            </div>
+
+            {/* Login Form (Mobile: Bottom, Desktop: Right) */}
+            <div className="bg-white p-8 lg:mt-16 -mt-96 rounded-lg shadow-md w-96 -mb-44 lg:mb-7">
+                <h2 className="text-2xl font-bold text-center mb-6 ">𝑳𝒐𝒈𝒊𝒏 𝑵𝒐𝒘</h2>
 
                 <form onSubmit={handleSubmit}>
-                    {/* Email Input */}
                     <div className="mb-4">
                         <label className="block text-gray-700">Email</label>
                         <input
@@ -68,7 +96,6 @@ const Login = () => {
                         />
                     </div>
 
-                    {/* Password Input */}
                     <div className="mb-4">
                         <label className="block text-gray-700">Password</label>
                         <input
@@ -80,42 +107,73 @@ const Login = () => {
                         />
                     </div>
 
-                    {/* Forgot Password Link */}
                     <div className="mb-4 text-right">
-                        <Link
-                            to="/forgot-password"
+                        <button
+                            type="button"
+                            onClick={() => setShowResetModal(true)}
                             className="text-sm text-blue-500 hover:underline"
                         >
                             Forgot Password?
-                        </Link>
+                        </button>
                     </div>
 
-                    {/* Login Button */}
+                    {message && (
+                        <p className={`mb-4 text-center ${isError ? "text-red-500" : "text-green-500"}`}>
+                            {message}
+                        </p>
+                    )}
+
                     <button
                         type="submit"
                         className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-                        disabled={loading} // Disable button while loading
+                        disabled={loading}
                     >
-                        {loading ? (
-                            <span className="loading loading-infinity loading-lg"></span> // Show loading spinner
-                        ) : (
-                            'Login'
-                        )}
+                        {loading ? <span className="loading loading-infinity loading-lg"></span> : "Login"}
                     </button>
+
                     <div className="flex justify-center mt-2">
-                        <GoogleLogin></GoogleLogin>
+                        <GoogleLogin />
                     </div>
                 </form>
 
-                {/* Sign Up Redirect */}
                 <p className="mt-4 text-center">
                     Don&apos;t have an account?{" "}
                     <Link to="/register" className="text-blue-500 hover:underline">
                         Sign Up
                     </Link>
                 </p>
-
             </div>
+
+            {/* Password Reset Modal with Background Blur */}
+            {showResetModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-md">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <h3 className="text-xl font-bold text-center mb-4">Reset Password</h3>
+                        <p className="text-center text-gray-600 mb-4">Enter your email to receive reset instructions.</p>
+                        <input
+                            type="email"
+                            value={emailForReset}
+                            onChange={(e) => setEmailForReset(e.target.value)}
+                            className="w-full p-2 border rounded mb-4"
+                            placeholder="Enter your email"
+                        />
+                        <div className="flex justify-between">
+                            <button
+                                onClick={() => setShowResetModal(false)}
+                                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handlePasswordReset}
+                                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            >
+                                Reset Password
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

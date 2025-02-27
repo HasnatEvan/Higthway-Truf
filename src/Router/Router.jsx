@@ -13,6 +13,7 @@ import AdminRoute from "./AdminRoute";
 import ManageSlot from "../Pages/ManageSlot/ManageSlot";
 import MySlotList from "../Pages/MySlotList/MySlotList";
 import UpdateSlots from "../Pages/MySlotList/UpdateSlots";
+import About from "../Pages/About/About";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <Home></Home>
+      },
+      {
+        path: '/about',
+        element:<About></About>
       },
       // Admin------------------------------->
       {
@@ -34,7 +39,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/manage-slot',
-        element: <PrivateRoute><ManageSlot></ManageSlot></PrivateRoute>
+        element: <PrivateRoute><AdminRoute><ManageSlot></ManageSlot></AdminRoute></PrivateRoute>
       },
       {
         path: '/my-slot-list',

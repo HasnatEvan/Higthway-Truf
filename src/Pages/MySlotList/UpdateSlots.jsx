@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../Hook/useAxiosSecure";
 import Swal from "sweetalert2";
 
 const UpdateSlots = () => {
     const { id } = useParams();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const [slotData, setSlotData] = useState({
         date: "",
         time: "",
@@ -15,7 +17,6 @@ const UpdateSlots = () => {
         advance: "",
         nogod: "",
         bkash: "",
-        description: "",
     });
 
     // 🔹 API থেকে ডাটা লোড করা
@@ -34,6 +35,7 @@ const UpdateSlots = () => {
     // 🔹 ফর্ম সাবমিট হ্যান্ডলার
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsLoading(true);
         try {
             const response = await axiosSecure.put(`/slots/${id}`, slotData);
             console.log("Response:", response.data); // 🔹 Debugging
@@ -46,6 +48,8 @@ const UpdateSlots = () => {
                     timer: 2000,
                     showConfirmButton: false,
                 });
+                // 🔹 Navigate to the My Slot List page after successful update
+                navigate("/my-slot-list");
             } else {
                 console.warn("No modifications detected!");
             }
@@ -60,7 +64,6 @@ const UpdateSlots = () => {
         }
     };
     
-
     // 🔹 ইনপুট পরিবর্তন হ্যান্ডলার
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -70,9 +73,10 @@ const UpdateSlots = () => {
     return (
         <div className="flex items-center justify-center min-h-screen">
             <div className="bg-white p-8 rounded-lg shadow-md w-96">
-                <h2 className="text-2xl font-bold text-center mb-6">Update Slot</h2>
+                <h2 className="text-2xl font-bold text-center mb-6 text-lime-600">𝑼𝒑𝒅𝒂𝒕𝒆 𝑺𝒍𝒐𝒕</h2>
 
                 <form onSubmit={handleSubmit}>
+                    {/* Date Input */}
                     <div className="mb-4">
                         <label className="block text-gray-700">Date</label>
                         <input
@@ -85,6 +89,7 @@ const UpdateSlots = () => {
                         />
                     </div>
 
+                    {/* Time Input */}
                     <div className="mb-4">
                         <label className="block text-gray-700">Time</label>
                         <select
@@ -122,99 +127,109 @@ const UpdateSlots = () => {
                         </select>
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Select Time Period</label>
-                        <select
-                            name="timesOfDay"
-                            value={slotData.timesOfDay}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded mt-1"
-                            required
-                        >
-                            <option value="">Select Time Period</option>
-                            <option value="Morning">Morning</option>
-                            <option value="Afternoon">Afternoon</option>
-                            <option value="Evening">Evening</option>
-                            <option value="Night">Night</option>
-                        </select>
+                    {/* Select Time Period & Available Slots in two columns */}
+                    <div className="mb-4 flex space-x-4">
+                        {/* Left side field */}
+                        <div className="w-1/2">
+                            <label className="block text-gray-700">Select Time Period</label>
+                            <select
+                                name="timesOfDay"
+                                value={slotData.timesOfDay}
+                                onChange={handleChange}
+                                className="w-full p-2 border rounded mt-1"
+                                required
+                            >
+                                <option value="">Select Time Period</option>
+                                <option value="Morning">Morning</option>
+                                <option value="Afternoon">Afternoon</option>
+                                <option value="Evening">Evening</option>
+                                <option value="Night">Night</option>
+                            </select>
+                        </div>
+
+                        {/* Right side field */}
+                        <div className="w-1/2">
+                            <label className="block text-gray-700">Available Slots</label>
+                            <input
+                                type="number"
+                                name="availableSlots"
+                                value={slotData.availableSlots}
+                                onChange={handleChange}
+                                className="w-full p-2 border rounded mt-1"
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Available Slots</label>
-                        <input
-                            type="number"
-                            name="availableSlots"
-                            value={slotData.availableSlots}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded mt-1"
-                            required
-                        />
+                    {/* Price & Advance fields in two columns */}
+                    <div className="mb-4 flex space-x-4">
+                        {/* Left side field */}
+                        <div className="w-1/2">
+                            <label className="block text-gray-700">Price</label>
+                            <input
+                                type="number"
+                                name="price"
+                                value={slotData.price}
+                                onChange={handleChange}
+                                className="w-full p-2 border rounded mt-1"
+                                required
+                            />
+                        </div>
+
+                        {/* Right side field */}
+                        <div className="w-1/2">
+                            <label className="block text-gray-700">Advance for Booking</label>
+                            <input
+                                type="number"
+                                name="advance"
+                                value={slotData.advance}
+                                onChange={handleChange}
+                                className="w-full p-2 border rounded mt-1"
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Price</label>
-                        <input
-                            type="number"
-                            name="price"
-                            value={slotData.price}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded mt-1"
-                            required
-                        />
+                    {/* Nogod & Bkash fields in two columns */}
+                    <div className="mb-4 flex space-x-4">
+                        {/* Left side field */}
+                        <div className="w-1/2">
+                            <label className="block text-gray-700">Nogod Number</label>
+                            <input
+                                type="text"
+                                name="nogod"
+                                value={slotData.nogod}
+                                onChange={handleChange}
+                                className="w-full p-2 border rounded mt-1"
+                                required
+                            />
+                        </div>
+
+                        {/* Right side field */}
+                        <div className="w-1/2">
+                            <label className="block text-gray-700">Bkash Number</label>
+                            <input
+                                type="text"
+                                name="bkash"
+                                value={slotData.bkash}
+                                onChange={handleChange}
+                                className="w-full p-2 border rounded mt-1"
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Advance for Booking</label>
-                        <input
-                            type="number"
-                            name="advance"
-                            value={slotData.advance}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded mt-1"
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Nogod Number</label>
-                        <input
-                            type="text"
-                            name="nogod"
-                            value={slotData.nogod}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded mt-1"
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Bkash Number</label>
-                        <input
-                            type="text"
-                            name="bkash"
-                            value={slotData.bkash}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded mt-1"
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Description</label>
-                        <textarea
-                            name="description"
-                            value={slotData.description}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded mt-1"
-                            required
-                        />
-                    </div>
-
+                    {/* Submit Button */}
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                        className="w-full bg-gradient-to-r from-lime-600 to-lime-700 text-white p-2 rounded"
+                        disabled={isLoading} // 🔹 Disable button during loading
                     >
-                        Update Slot
+                        {isLoading ? (
+                            <span className="loading loading-infinity loading-lg"></span> // 🔹 Show loading spinner when isLoading is true
+                        ) : (
+                            "Update Slot"
+                        )}
                     </button>
                 </form>
             </div>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Swal from "sweetalert2";
 import useAuth from "../../Hook/useAuth";
 import useAxiosSecure from "../../Hook/useAxiosSecure";
@@ -5,9 +6,11 @@ import useAxiosSecure from "../../Hook/useAxiosSecure";
 const AddSlot = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Start loading
         const form = e.target;
         const date = form.date.value;
         const time = form.time.value;
@@ -17,7 +20,6 @@ const AddSlot = () => {
         const advance = form.advance.value;
         const bkash = form.bkash.value;
         const nogod = form.nogod.value;
-        const description = form.description.value;
 
         const slotOwner = {
             name: user?.displayName,
@@ -34,52 +36,42 @@ const AddSlot = () => {
             advance: parseFloat(advance),
             bkash,
             nogod,
-            description,
             slotOwner
         };
 
         try {
-            // Save to Database
             await axiosSecure.post('/slots', slotData);
-
-            // Show success message
             Swal.fire({
                 title: 'Success!',
                 text: 'Slot added successfully!',
                 icon: 'success',
                 confirmButtonText: 'OK'
             });
-
-            // Optionally, you can clear the form here if needed
             form.reset();
         } catch {
-            // Show error message
             Swal.fire({
                 title: 'Error!',
                 text: 'Failed to add slot. Please try again.',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <div className="bg-white p-8 rounded-lg shadow-md w-96">
-                <h2 className="text-2xl font-bold text-center mb-6">Add Slot</h2>
+        <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
+            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl">
+                <h2 className="text-2xl font-bold text-center mb-6 ">𝑨𝒅𝒅 𝑺𝒍𝒐𝒕𝒔</h2>
 
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
                         <label className="block text-gray-700">Date</label>
-                        <input
-                            type="date"
-                            name="date"
-                            className="w-full p-2 border rounded mt-1"
-                            required
-                        />
+                        <input type="date" name="date" className="w-full p-2 border rounded mt-1" required />
                     </div>
 
-                    <div className="mb-4">
+                    <div>
                         <label className="block text-gray-700">Time</label>
                         <select name="time" className="w-full p-2 border rounded mt-1" required>
                             <option value="">Select Time</option>
@@ -110,7 +102,7 @@ const AddSlot = () => {
                         </select>
                     </div>
 
-                    <div className="mb-4">
+                    <div>
                         <label className="block text-gray-700">Select Time Period</label>
                         <select name="timesOfDay" className="w-full p-2 border rounded mt-1" required>
                             <option value="">Select Time Period</option>
@@ -121,62 +113,36 @@ const AddSlot = () => {
                         </select>
                     </div>
 
-                    <div className="mb-4">
+                    <div>
                         <label className="block text-gray-700">Available Slots</label>
-                        <input
-                            type="number"
-                            name="availableSlots"
-                            className="w-full p-2 border rounded mt-1"
-                            placeholder="Enter number of slots"
-                            required
-                        />
+                        <input type="number" name="availableSlots" className="w-full p-2 border rounded mt-1" placeholder="Enter number of slots" required />
                     </div>
 
-                    <div className="mb-4">
+                    <div>
                         <label className="block text-gray-700">Price</label>
-                        <input
-                            type="number"
-                            name="price"
-                            className="w-full p-2 border rounded mt-1"
-                            placeholder="Enter price"
-                            required
-                        />
+                        <input type="number" name="price" className="w-full p-2 border rounded mt-1" placeholder="Enter price" required />
                     </div>
-                    <div className="mb-4">
+
+                    <div>
                         <label className="block text-gray-700">Advance for Booking</label>
-                        <input
-                            type="number"
-                            name="advance"
-                            className="w-full p-2 border rounded mt-1"
-                            placeholder="Enter advance price"
-                            required
-                        />
+                        <input type="number" name="advance" className="w-full p-2 border rounded mt-1" placeholder="Enter advance price" required />
                     </div>
-                    <div className="mb-4">
+
+                    <div>
                         <label className="block text-gray-700">Nogod Number</label>
                         <input type="text" name="nogod" className="w-full p-2 border rounded mt-1" placeholder="Enter Nogod Number" required />
                     </div>
-                    <div className="mb-4">
+
+                    <div>
                         <label className="block text-gray-700">Bkash Number</label>
                         <input type="text" name="bkash" className="w-full p-2 border rounded mt-1" placeholder="Enter Bkash Number" required />
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Description</label>
-                        <textarea
-                            name="description"
-                            className="w-full p-2 border rounded mt-1"
-                            placeholder="Enter a brief description"
-                            required
-                        />
+                    <div className="md:col-span-2">
+                        <button type="submit" className="w-full bg-gradient-to-r from-lime-600 to-lime-700 text-white p-2 flex justify-center items-center">
+                            {loading ? <span className="loading loading-infinity loading-lg"></span> : "Add Slot"}
+                        </button>
                     </div>
-
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-                    >
-                        Add Slot
-                    </button>
                 </form>
             </div>
         </div>

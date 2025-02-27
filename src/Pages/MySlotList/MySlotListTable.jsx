@@ -1,6 +1,7 @@
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hook/useAxiosSecure";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types"; // Import PropTypes
 
 const MySlotListTable = ({ slot, refetch }) => {
     const { 
@@ -10,8 +11,7 @@ const MySlotListTable = ({ slot, refetch }) => {
         date, 
         availableSlots, 
         price, 
-        advance, 
-        description, 
+        advance,
         bkash, 
         nogod 
     } = slot;
@@ -31,7 +31,7 @@ const MySlotListTable = ({ slot, refetch }) => {
         if (result.isConfirmed) {
             try {
                 await axiosSecure.delete(`/slots/${_id}`);
-                refetch(); // ✅ ডাটা রিফ্রেশ হবে
+                refetch(); 
                 Swal.fire('Deleted!', 'Your item has been deleted.', 'success');
             } catch (error) {
                 console.error('Error deleting item:', error);
@@ -41,20 +41,20 @@ const MySlotListTable = ({ slot, refetch }) => {
     };
 
     return (
-        <tr className="border-b text-center">
-            <td className="p-3">{time}</td>
+        <tr className="border-b text-center ">
+            <td className="p-3 whitespace-nowrap">{time}</td>
             <td className="p-3">{timesOfDay}</td>
-            <td className="p-3">{date}</td>
-            <td className="p-3">{availableSlots}</td>
-            <td className="p-3">{price} BDT</td>
-            <td className="p-3">{advance} BDT</td>
-            <td className="p-3">{bkash} / {nogod}</td>
-            <td className="p-3">{description}</td>
-            <td className="p-3 space-x-2">
+            <td className="p-3 whitespace-nowrap">{date}</td>
+            <td className="p-3 hidden sm:table-cell">{availableSlots}</td>
+            <td className="p-3 hidden md:table-cell">{price} BDT</td>
+            <td className="p-3 hidden lg:table-cell">{advance} BDT</td>
+            <td className="p-3 hidden lg:table-cell">{bkash} / {nogod}</td>
+
+            <td className="p-3 space-x-2 whitespace-nowrap">
                 <Link to={`/update-slots/${_id}`}>  
-                <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                    Update
-                </button>
+                    <button className="bg-gradient-to-r from-lime-600 to-lime-700 text-white px-3 py-1 rounded">
+                        Update
+                    </button>
                 </Link>
                 <button 
                     onClick={handleDelete}
@@ -65,6 +65,22 @@ const MySlotListTable = ({ slot, refetch }) => {
             </td>
         </tr>
     );
+    
+};
+// PropTypes validation for `slot` and `refetch`
+MySlotListTable.propTypes = {
+    slot: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        time: PropTypes.string.isRequired,
+        timesOfDay: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired, // Validate that `date` is a string
+        availableSlots: PropTypes.number.isRequired,
+        price: PropTypes.number.isRequired,
+        advance: PropTypes.number.isRequired,
+        bkash: PropTypes.string.isRequired,
+        nogod: PropTypes.string.isRequired,
+    }).isRequired,
+    refetch: PropTypes.func.isRequired, // Ensure `refetch` is a function
 };
 
 export default MySlotListTable;
