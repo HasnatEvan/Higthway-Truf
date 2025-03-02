@@ -22,8 +22,8 @@ const MySlots = () => {
     }, []);
 
     return (
-        <div>
-            <h1 className="text-3xl font-semibold text-center mb-6 ">𝑴𝒚 𝑩𝒐𝒐𝒌𝒊𝒏𝒈𝒔</h1> {/* Added title */}
+        <div className="bg-white text-gray-700">
+            <h1 className="text-3xl font-semibold text-center mb-2 ">𝑴𝒚 𝑩𝒐𝒐𝒌𝒊𝒏𝒈𝒔</h1> {/* Added title */}
 
             {bookings.length > 0 ? (
                 bookings.map((booking, index) => (

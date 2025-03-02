@@ -7,7 +7,7 @@ const AllSlots = () => {
     const { data: slots, isLoading, isError } = useQuery({
         queryKey: ["slots"],
         queryFn: async () => {
-            const { data } = await axios.get("http://localhost:5000/slots");
+            const { data } = await axios.get("https://highway-turf-server.vercel.app/slots");
             return data;
         },
     });
@@ -21,8 +21,8 @@ const AllSlots = () => {
     }
 
     return (
-        <div className="w-full p-4 sm:p-6 lg:p-8">
-            <h2 className="text-2xl font-bold text-center mb-4 ">𝑨𝒗𝒂𝒊𝒍𝒂𝒃𝒍𝒆 𝑺𝒍𝒐𝒕𝒔</h2>
+        <div className="w-full p-4 sm:p-6 lg:p-8 bg-white     text-gray-700">
+            <h2 className="text-2xl font-bold text-center mb-4 lg:-mt-6  ">𝑨𝒗𝒂𝒊𝒍𝒂𝒃𝒍𝒆 𝑺𝒍𝒐𝒕𝒔</h2>
 
             {slots.length > 0 ? (
                 <div className="w-full overflow-x-auto">
@@ -32,7 +32,6 @@ const AllSlots = () => {
                                 <th className="border px-2 py-2">Date</th>
                                 <th className="border px-2 py-2">Time</th>
                                 <th className="border px-2 py-2">Time Period</th>
-                                <th className="border px-2 py-2">Available Slots</th>
                                 <th className="border px-2 py-2">Price</th>
                                 <th className="border px-2 py-2">Advance</th>
                                 <th className="border px-2 py-2">Action</th>

@@ -114,7 +114,7 @@ const Module = ({ slotDetails, onClose }) => {
   return (
     <Dialog open={true} as="div" className="relative z-10" onClose={onClose}>
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
-        <DialogPanel className="w-full max-w-md sm:max-w-lg lg:max-w-xl bg-white rounded-lg shadow-lg p-6 overflow-auto max-h-[80vh]">
+        <DialogPanel className="w-full max-w-md sm:max-w-lg lg:max-w-xl bg-white text-gray-700 rounded-lg shadow-lg p-6 overflow-auto max-h-[80vh]">
           <DialogTitle className="text-lg font-semibold text-gray-800 text-center">
             𝑪𝒐𝒏𝒇𝒊𝒓𝒎 𝑩𝒐𝒐𝒌𝒊𝒏𝒈
           </DialogTitle>

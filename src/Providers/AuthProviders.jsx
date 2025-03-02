@@ -54,10 +54,10 @@ const AuthProviders = ({ children }) => {
       const fetchJWT = async () => {
         if (currentUser?.email) {
           setUser(currentUser);
-          await axios.post("http://localhost:5000/jwt", { email: currentUser?.email }, { withCredentials: true });
+          await axios.post("https://highway-turf-server.vercel.app/jwt", { email: currentUser?.email }, { withCredentials: true });
         } else {
           setUser(null);
-          await axios.get("http://localhost:5000/logout", { withCredentials: true });
+          await axios.get("https://highway-turf-server.vercel.app/logout", { withCredentials: true });
         }
         setLoading(false);
       };

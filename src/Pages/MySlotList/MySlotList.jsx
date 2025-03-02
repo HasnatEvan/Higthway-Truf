@@ -24,7 +24,7 @@ const MySlotList = () => {
     }
 
     return (
-        <div className="p-4">
+        <div className="p-4 bg-white text-gray-700">
             <h2 className="text-3xl font-bold text-center  mb-2 ">𝑴𝒚 𝑺𝒍𝒐𝒕𝒔 𝑳𝒊𝒔𝒕</h2>
             <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-gray-300">

@@ -10,7 +10,7 @@ import Section from "./Section";
 
 const Home = () => {
     return (
-        <div>
+        <div className="bg-white text-gray-700">
             <Banner></Banner>
             <AllSlots></AllSlots>
             <Section></Section>

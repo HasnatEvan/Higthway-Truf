@@ -81,7 +81,7 @@ const Login = () => {
             </div>
 
             {/* Login Form (Mobile: Bottom, Desktop: Right) */}
-            <div className="bg-white p-8 lg:mt-16 -mt-96 rounded-lg shadow-md w-96 -mb-44 lg:mb-7">
+            <div className="bg-white text-gray-700 p-8 lg:mt-16 -mt-96 rounded-lg shadow-md w-96 -mb-44 lg:mb-7">
                 <h2 className="text-2xl font-bold text-center mb-6 ">𝑳𝒐𝒈𝒊𝒏 𝑵𝒐𝒘</h2>
 
                 <form onSubmit={handleSubmit}>

@@ -61,7 +61,7 @@ const AddSlot = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
+        <div className="flex items-center justify-center min-h-screen bg-white text-gray-700 p-4">
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl">
                 <h2 className="text-2xl font-bold text-center mb-6 ">𝑨𝒅𝒅 𝑺𝒍𝒐𝒕𝒔</h2>
 

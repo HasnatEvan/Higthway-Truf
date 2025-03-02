@@ -30,7 +30,6 @@ const SlotsTable = ({ slot }) => {
                 <td className="border px-2 py-2 whitespace-nowrap">{date}</td>
                 <td className="border px-2 py-2 whitespace-nowrap">{time}</td>
                 <td className="border px-2 py-2">{timesOfDay}</td>
-                <td className="border px-2 py-2">{availableSlots}</td>
                 <td className="border px-2 py-2">৳{price}</td>
                 <td className="border px-2 py-2">৳{advance}</td>
                 <td className="border px-2 py-2">

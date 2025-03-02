@@ -43,7 +43,7 @@ const ContactForm = () => {
 
     return (
         <div className="max-w-lg mx-auto p-6">
-            <h2 className="text-3xl font-semibold text-center mb-6">Contact Us</h2>
+            <h2 className="text-3xl font-semibold text-center mb-6">𝑪𝒐𝒏𝒕𝒂𝒄𝒕 𝑼𝒔</h2>
             <form ref={formRef} onSubmit={sendEmail} className="space-y-6">
                 {/* Name Field */}
                 <div>

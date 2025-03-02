@@ -38,7 +38,7 @@ const SignUp = () => {
 
       const userData = { name, email, photoUrl };
 
-      await axios.post(`http://localhost:5000/users/${email}`, userData);
+      await axios.post(`https://highway-turf-server.vercel.app/users/${email}`, userData);
 
       Swal.fire({
         title: "Success!",
@@ -74,7 +74,7 @@ const SignUp = () => {
       </div>
 
       {/* Sign Up Form */}
-      <div className="w-full md:w-[400px] bg-white p-6 md:p-8 rounded-lg shadow-md lg:mt-16">
+      <div className="w-full md:w-[400px] bg-white text-gray-700 p-6 md:p-8 rounded-lg shadow-md lg:mt-16">
         <h2 className="text-2xl font-bold text-center mb-6 ">𝑺𝒊𝒈𝒏 𝑼𝒑 𝑵𝒐𝒘</h2>
 
         <form onSubmit={handleSubmit}>

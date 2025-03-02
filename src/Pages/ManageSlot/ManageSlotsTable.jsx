@@ -73,7 +73,7 @@ const ManageSlotsTable = ({ booking, serial, refetch }) => {
             <td className="p-2 md:p-4 border">{time} ({timesOfDay})</td>
             <td className="p-2 md:p-4 border">{price}</td>
             <td className="p-2 md:p-4 border">{paymentMethod}</td>
-            <td className="p-2 md:p-4 border">{transactionId}</td>
+            <td className="p-2 md:p-4 border text-red-500">{transactionId}</td>
             <td className="p-2 md:p-4 border">
                 <select
                     className={`p-2 rounded-md text-xs md:text-sm 
