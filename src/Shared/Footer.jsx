@@ -7,7 +7,7 @@ const Footer = () => {
   const [role] = useRole();
 
   return (
-    <footer className="bg-gradient-to-r from-lime-400 to-lime-500 text-white p-10">
+    <footer className="bg-[#fcf7ee] text-black p-10 ">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
 
         {/* Logo & Info */}
@@ -56,7 +56,7 @@ const Footer = () => {
       </div>
 
       {/* Developer Name and Copyright */}
-      <div className="text-center text-sm text-white mt-6">
+      <div className="text-center text-sm text-black mt-6">
         <p>
           Developed by{" "}
           <a href="https://neon-crepe-750faf.netlify.app/" target="_blank" rel="noopener noreferrer" className="hover:text-lime-400">

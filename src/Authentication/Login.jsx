@@ -74,15 +74,15 @@ const Login = () => {
     };
 
     return (
-        <div className={`flex flex-col md:flex-row items-center justify-around min-h-screen bg-gray-100 ${showResetModal ? "backdrop-blur-md" : ""}`}>
-            {/* Lottie Animation (Mobile: Top, Desktop: Left) */}
-            <div className="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 -mt-32 lg:mt-32">
+        <div className={`flex flex-col md:flex-row border-b border-gray-200 items-center justify-around min-h-screen bg-[#fcf8f0] text-black px-4 ${showResetModal ? "backdrop-blur-md" : ""}`}>
+            {/* Lottie Animation */}
+            <div className="w-full md:w-1/2 flex justify-center mt-12 md:mt-0">
                 <Lottie animationData={loginLottie} loop={true} className="w-3/4 md:w-full h-auto" />
             </div>
 
-            {/* Login Form (Mobile: Bottom, Desktop: Right) */}
-            <div className="bg-white text-gray-700 p-8 lg:mt-16 -mt-96 rounded-lg shadow-md w-96 -mb-44 lg:mb-7">
-                <h2 className="text-2xl font-bold text-center mb-6 ">𝑳𝒐𝒈𝒊𝒏 𝑵𝒐𝒘</h2>
+            {/* Login Form */}
+            <div className="bg-[#fcf8f0] p-8 w-full max-w-md md:mt-0 -mt-[100px]">
+                <h2 className="text-2xl font-bold text-center mb-6">Login Now</h2>
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
@@ -131,7 +131,7 @@ const Login = () => {
                         {loading ? <span className="loading loading-infinity loading-lg"></span> : "Login"}
                     </button>
 
-                    <div className="flex justify-center mt-2">
+                    <div className="flex justify-center mt-4">
                         <GoogleLogin />
                     </div>
                 </form>
@@ -144,10 +144,10 @@ const Login = () => {
                 </p>
             </div>
 
-            {/* Password Reset Modal with Background Blur */}
+            {/* Password Reset Modal */}
             {showResetModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-md">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md">
                         <h3 className="text-xl font-bold text-center mb-4">Reset Password</h3>
                         <p className="text-center text-gray-600 mb-4">Enter your email to receive reset instructions.</p>
                         <input
@@ -157,7 +157,7 @@ const Login = () => {
                             className="w-full p-2 border rounded mb-4"
                             placeholder="Enter your email"
                         />
-                        <div className="flex justify-between">
+                        <div className="flex justify-end gap-2">
                             <button
                                 onClick={() => setShowResetModal(false)}
                                 className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"

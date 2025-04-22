@@ -47,7 +47,7 @@ const AddSlot = () => {
                 icon: 'success',
                 confirmButtonText: 'OK'
             });
-            form.reset();
+            
         } catch {
             Swal.fire({
                 title: 'Error!',
@@ -61,9 +61,9 @@ const AddSlot = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-white text-gray-700 p-4">
-            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl">
-                <h2 className="text-2xl font-bold text-center mb-6 ">𝑨𝒅𝒅 𝑺𝒍𝒐𝒕𝒔</h2>
+        <div className="flex items-center justify-center min-h-screen bg-[#fffaf2] text-gray-700 p-4">
+            <div className="bg-[#fffaf2] p-6  w-full max-w-2xl">
+                <h2 className="text-2xl font-bold text-center mb-6 ">Add Slots</h2>
 
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -139,7 +139,7 @@ const AddSlot = () => {
                     </div>
 
                     <div className="md:col-span-2">
-                        <button type="submit" className="w-full bg-gradient-to-r from-lime-600 to-lime-700 text-white p-2 flex justify-center items-center">
+                        <button type="submit" className="w-full  bg-[#d9ab3f] text-white p-2 flex justify-center items-center">
                             {loading ? <span className="loading loading-infinity loading-lg"></span> : "Add Slot"}
                         </button>
                     </div>

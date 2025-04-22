@@ -67,15 +67,15 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-around min-h-[80vh] bg-gray-100 p-4">
+    <div className="flex flex-col md:flex-row items-center justify-around min-h-[80vh] bg-[#fcf8f0] p-4 border-b border-gray-200">
       {/* Lottie Animation (Responsive for All Devices) */}
       <div className="w-full md:w-1/3 flex justify-center mt-10">
         <Lottie animationData={signupLottie} loop={true} className="w-2/3 md:w-full h-auto" />
       </div>
 
       {/* Sign Up Form */}
-      <div className="w-full md:w-[400px] bg-white text-gray-700 p-6 md:p-8 rounded-lg shadow-md lg:mt-16">
-        <h2 className="text-2xl font-bold text-center mb-6 ">𝑺𝒊𝒈𝒏 𝑼𝒑 𝑵𝒐𝒘</h2>
+      <div className="w-full md:w-[400px] bg-[#fcf8f0] text-gray-700 p-6 md:p-8  lg:mt-16">
+        <h2 className="text-2xl font-bold text-center mb-6 ">Sign Up Now</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

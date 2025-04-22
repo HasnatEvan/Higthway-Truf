@@ -1,116 +1,123 @@
 import PropTypes from 'prop-types';
-import useAxiosSecure from "../../Hook/useAxiosSecure";
-import Swal from "sweetalert2";
 import { useEffect, useState } from 'react';
+import { FaCalendarAlt, FaCreditCard, FaPhoneAlt, FaDollarSign, FaClock, FaRegListAlt, FaCircle } from "react-icons/fa"
 
-const MySlotsTable = ({ booking, index }) => {
-    const { _id, date, paymentMethod, phone, price, status, time, timesOfDay, transactionId, slotsId } = booking;
-    const axiosSecure = useAxiosSecure();
-
+const MySlotsTable = ({ booking, index, view }) => {
+    const { date, paymentMethod, phone, price, status, time, timesOfDay, transactionId } = booking;
     const [currentStatus, setCurrentStatus] = useState(status);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setCurrentStatus(status);  // Update the status when prop changes
+        setCurrentStatus(status);
     }, [status]);
 
-    const handleCancelBooking = async () => {
-        setLoading(true);
-        const result = await Swal.fire({
-            title: 'Are you sure?',
-            text: 'Do you really want to cancel this booking?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, cancel it!',
-            cancelButtonText: 'No, keep it',
-        });
+    const formattedDate = new Date(date).toLocaleDateString();
 
-        if (result.isConfirmed) {
-            try {
-                const response = await axiosSecure.delete(`/bookings/${_id}`);
-                await axiosSecure.patch(`/bookings/availableSlots/${slotsId}`, { availableSlotsToUpdate: 1, status: 'increase' });
+    const statusColorClass =
+        currentStatus === 'Pending' ? 'text-yellow-600' :
+            currentStatus === 'Processing' ? 'text-blue-600' :
+                currentStatus === 'Confirm' ? 'text-green-600' :
+                    currentStatus === 'Canceled' ? 'text-red-600' : 'text-gray-600';
 
-                if (response.status === 200) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Booking Cancelled",
-                        text: "Your booking has been successfully cancelled.",
-                        confirmButtonText: "OK",
-                    });
-                    setCurrentStatus('canceled');
-                }
-            } catch {
-                Swal.fire({
-                    icon: "error",
-                    title: "Failed to Cancel Booking",
-                    text: "Something went wrong. Please try again later.",
-                    confirmButtonText: "OK",
-                });
-            }
-        }
-        setLoading(false);
-    };
+    if (view === 'table') {
+        return (
+            <tr className="text-center whitespace-nowrap">
+                <td className="p-2 border">{index}</td>
+                <td className="p-2 border">{formattedDate}</td>
+                <td className="p-2 border">{paymentMethod}</td>
+                <td className="p-2 border">{phone}</td>
+                <td className="p-2 border">{price} BDT</td>
+                <td className={`p-2 border ${statusColorClass}`}>{currentStatus}</td>
+                <td className="p-2 border">{time}</td>
+                <td className="p-2 border">{timesOfDay}</td>
+                <td className="p-2 border">{transactionId}</td>
+            </tr>
+        );
+    }
 
-    // Determine the status color dynamically
-    const statusColorClass = currentStatus === 'Pending' ? 'text-yellow-600' :
-                            currentStatus === 'Processing' ? 'text-blue-600' :
-                            currentStatus === 'Confirm' ? 'text-green-600' :
-                            currentStatus === 'Canceled' ? 'text-red-600' : 'text-gray-600';
-
+    // Card view for mobile
     return (
-        <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-300 bg-white shadow-md">
-                <thead>
-                    <tr className="bg-gray-200 bg-gradient-to-r from-lime-400 to-lime-500 text-white whitespace-nowrap">
-                        <th className="p-2 border text-xs sm:text-sm md:text-base">#</th>
-                        <th className="p-2 border text-xs sm:text-sm md:text-base">Date</th>
-                        <th className="p-2 border text-xs sm:text-sm md:text-base">Payment Method</th>
-                        <th className="p-2 border text-xs sm:text-sm md:text-base">Phone</th>
-                        <th className="p-2 border text-xs sm:text-sm md:text-base">Price</th>
-                        <th className="p-2 border text-xs sm:text-sm md:text-base">Status</th>
-                        <th className="p-2 border text-xs sm:text-sm md:text-base">Time</th>
-                        <th className="p-2 border text-xs sm:text-sm md:text-base">Times of Day</th>
-                        <th className="p-2 border text-xs sm:text-sm md:text-base">Transaction ID</th>
-                        <th className="p-2 border text-xs sm:text-sm md:text-base">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr className="text-center whitespace-nowrap">
-                        <td className="p-2 border">{index}</td>
-                        <td className="p-2 border">{date}</td>
-                        <td className="p-2 border">{paymentMethod}</td>
-                        <td className="p-2 border">{phone}</td>
-                        <td className="p-2 border">{price} BDT</td>
-                        <td className={`p-2 border ${statusColorClass}`}>
-                            {currentStatus}
-                        </td>
-                        <td className="p-2 border">{time}</td>
-                        <td className="p-2 border">{timesOfDay}</td>
-                        <td className="p-2 border">{transactionId}</td>
-                        <td className="px-4 py-2">
-                            {(currentStatus === "Pending" || currentStatus === "Canceled") && (
-                                <button
-                                    onClick={handleCancelBooking}
-                                    className={`py-1 px-4 rounded transition duration-300 ${loading
-                                        ? "bg-gray-400 text-white cursor-not-allowed"
-                                        : "bg-red-500 hover:bg-red-700 text-white"
-                                        }`}
-                                    disabled={loading}
-                                >
-                                    {loading ? "Cancelling..." : "Cancel"}
-                                </button>
-                            )}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+
+        <div className="bg-[#fcf7ee] text-black rounded-xl shadow-md p-4 border border-gray-200 space-y-2">
+            <div className="flex justify-between text-sm font-medium">
+                <div className="flex items-center gap-2">
+                    <FaRegListAlt className="text-gray-500" />
+                    <span>#</span>
+                </div>
+                <span>{index}</span>
+            </div>
+
+            <div className="flex justify-between text-sm font-medium">
+                <div className="flex items-center gap-2">
+                    <FaCalendarAlt className="text-blue-500" />
+                    <span>Date</span>
+                </div>
+                <span>{formattedDate}</span>
+            </div>
+
+            <div className="flex justify-between text-sm font-medium">
+                <div className="flex items-center gap-2">
+                    <FaCreditCard className="text-green-500" />
+                    <span>Payment Method</span>
+                </div>
+                <span>{paymentMethod}</span>
+            </div>
+
+            <div className="flex justify-between text-sm font-medium">
+                <div className="flex items-center gap-2">
+                    <FaPhoneAlt className="text-purple-500" />
+                    <span>Phone</span>
+                </div>
+                <span>{phone}</span>
+            </div>
+
+            <div className="flex justify-between text-sm font-medium">
+                <div className="flex items-center gap-2">
+                    <FaDollarSign className="text-yellow-500" />
+                    <span>Price</span>
+                </div>
+                <span>{price} BDT</span>
+            </div>
+
+            <div className="flex justify-between text-sm font-medium">
+                <div className="flex items-center gap-2">
+                    <FaCircle className={`text-xs ${statusColorClass}`} />
+                    <span>Status</span>
+                </div>
+                <span className={`font-semibold px-2 py-1 rounded-full text-xs ${statusColorClass} bg-opacity-10 ${statusColorClass.replace("text-", "bg-")} ${currentStatus === "Confirm" ? "text-white" : ""}`}>
+                    {currentStatus}
+                </span>
+            </div>
+
+
+            <div className="flex justify-between text-sm font-medium">
+                <div className="flex items-center gap-2">
+                    <FaClock className="text-orange-500" />
+                    <span>Time</span>
+                </div>
+                <span>{time}</span>
+            </div>
+
+            <div className="flex justify-between text-sm font-medium">
+                <div className="flex items-center gap-2">
+                    <FaClock className="text-teal-500" />
+                    <span>Times of Day</span>
+                </div>
+                <span>{timesOfDay}</span>
+            </div>
+
+            <div className="flex justify-between text-sm font-medium">
+                <div className="flex items-center gap-2">
+                    <FaRegListAlt className="text-gray-500" />
+                    <span>Transaction ID</span>
+                </div>
+                <p className="break-words">{transactionId}</p>
+            </div>
         </div>
+
     );
 };
 
-// Define PropTypes for validation
 MySlotsTable.propTypes = {
     booking: PropTypes.shape({
         _id: PropTypes.string.isRequired,
@@ -122,9 +129,9 @@ MySlotsTable.propTypes = {
         time: PropTypes.string.isRequired,
         timesOfDay: PropTypes.string.isRequired,
         transactionId: PropTypes.string.isRequired,
-        slotsId: PropTypes.string.isRequired,
     }).isRequired,
     index: PropTypes.number.isRequired,
+    view: PropTypes.oneOf(['table', 'card']).isRequired,
 };
 
 export default MySlotsTable;

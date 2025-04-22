@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hook/useAxiosSecure";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types"; // Import PropTypes
+import PropTypes from "prop-types";
+import { FaTrashAlt } from "react-icons/fa";
 
 const MySlotListTable = ({ slot, refetch }) => {
     const { 
@@ -41,7 +41,7 @@ const MySlotListTable = ({ slot, refetch }) => {
     };
 
     return (
-        <tr className="border-b text-center ">
+        <tr className="border-b text-center bg-[#fffaf2]">
             <td className="p-3 whitespace-nowrap">{time}</td>
             <td className="p-3">{timesOfDay}</td>
             <td className="p-3 whitespace-nowrap">{date}</td>
@@ -49,38 +49,31 @@ const MySlotListTable = ({ slot, refetch }) => {
             <td className="p-3 hidden md:table-cell">{price} BDT</td>
             <td className="p-3 hidden lg:table-cell">{advance} BDT</td>
             <td className="p-3 hidden lg:table-cell">{bkash} / {nogod}</td>
-
-            <td className="p-3 space-x-2 whitespace-nowrap">
-                <Link to={`/update-slots/${_id}`}>  
-                    <button className="bg-gradient-to-r from-lime-600 to-lime-700 text-white px-3 py-1 rounded">
-                        Update
-                    </button>
-                </Link>
+            <td className="p-3 whitespace-nowrap">
                 <button 
                     onClick={handleDelete}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 flex items-center gap-1 mx-auto"
                 >
-                    Delete
+                    <FaTrashAlt className="text-white" /> 
                 </button>
             </td>
         </tr>
     );
-    
 };
-// PropTypes validation for `slot` and `refetch`
+
 MySlotListTable.propTypes = {
     slot: PropTypes.shape({
         _id: PropTypes.string.isRequired,
         time: PropTypes.string.isRequired,
         timesOfDay: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired, // Validate that `date` is a string
+        date: PropTypes.string.isRequired,
         availableSlots: PropTypes.number.isRequired,
         price: PropTypes.number.isRequired,
         advance: PropTypes.number.isRequired,
         bkash: PropTypes.string.isRequired,
         nogod: PropTypes.string.isRequired,
     }).isRequired,
-    refetch: PropTypes.func.isRequired, // Ensure `refetch` is a function
+    refetch: PropTypes.func.isRequired,
 };
 
 export default MySlotListTable;
